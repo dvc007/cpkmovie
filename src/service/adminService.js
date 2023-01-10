@@ -8,6 +8,10 @@ export const deleteUser = (account) => {
     return https.delete(`/api/QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${account}`)
 }
 
-export const registerUser = () => {
-    return https.post('/api/QuanLyNguoiDung/ThemNguoiDung')
+export let postRegister = (xxxx) => {
+    return https.post('/api/QuanLyNguoiDung/DangKy', xxxx)
 }
+
+// export const registerUser = () => {
+//     return https.post('/api/QuanLyNguoiDung/ThemNguoiDung')
+// }

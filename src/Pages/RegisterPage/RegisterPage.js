@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { postRegister } from '../../service/userService';
-import { getUserList } from './../../service/adminService';
+import { deleteUser, getUserList, postRegister } from './../../service/adminService';
 import { userColums } from '../AdminUserPage/utils';
-
+import { setUserInfo } from '../../redux_toolkit/userSlice';
+import { useDispatch } from 'react-redux';
+import { userLocalService } from '../../service/localSevice';
 import {
     Button,
     Form,
     Input,
+    message,
     Select,
     Table,
+
 } from 'antd';
 
 const { Option } = Select;
@@ -56,34 +59,41 @@ export default function RegisterPage() {
             </Select>
         </Form.Item>
     );
+    let dispatch = useDispatch()
 
     const onFinish = (values) => {
         postRegister(values)
             .then((result) => {
-                console.log(result);
+                message.success('ĐK Thành Công')
+                dispatch(setUserInfo(result.data.content))
+                userLocalService.set(result.data.content)
+                console.log(result.data.content);
             }).catch((err) => {
                 console.log(err);
             });
         console.log('Value ', values);
     };
 
+
+
+
     //getListUser
     const [userArr, setUserArr] = useState([])
-
+    console.log(userArr);
     useEffect(() => {
         let fetchUserList = () => {
 
-            // const handleRemoveUser = (account) => {
-            //     deleteUser(account)
-            //         .then((result) => {
-            //             message.success('Xóa thành công')
-            //             fetchUserList()
-            //             console.log(result);
-            //         }).catch((err) => {
-            //             message.error('Thất bại')
-            //             console.log(err.response.data.content);
-            //         });
-            // }
+            const handleRemoveUser = (account) => {
+                deleteUser(account)
+                    .then((result) => {
+                        message.success('Xóa thành công')
+                        fetchUserList()
+                        console.log(result);
+                    }).catch((err) => {
+                        message.error('Thất bại')
+                        console.log(err.response.data.content);
+                    });
+            }
 
             getUserList()
                 .then((result) => {
@@ -91,7 +101,7 @@ export default function RegisterPage() {
                         return {
                             ...item, key: item.taiKhoan, action:
                                 <div className='space-x-5'>
-                                    <Button type='primary' danger >Xóa</Button>
+                                    <Button type='primary' danger onClick={() => { handleRemoveUser(item.taiKhoan) }}>Xóa</Button>
                                     <Button type='dashed' >Sửa</Button>
                                 </div>
                         }
@@ -105,6 +115,7 @@ export default function RegisterPage() {
     }, [])
 
 
+
     return (
         <>
 
@@ -114,11 +125,24 @@ export default function RegisterPage() {
                     form={form}
                     name="register"
                     onFinish={onFinish}
-                    initialValues={{
-                        prefix: '84',
-                    }}
                     scrollToFirstError
                 >
+
+                    <Form.Item
+                        name="taiKhoan"
+                        label="Tai Khoan"
+                        tooltip="What do you want others to call you?"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tài khoản!',
+                                whitespace: true,
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
                     <Form.Item
                         name="email"
                         label="E-mail"
@@ -185,21 +209,23 @@ export default function RegisterPage() {
                     </Form.Item>
 
 
+
+
                     <Form.Item
-                        name="maLoaiNguoiDung"
-                        label="Loại người dùng"
+                        name="maNhom"
+                        label="Mã Nhóm"
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng chọn loại người dùng!',
+                                message: 'Vui lòng chọn mã nhóm!',
                             },
                         ]}
                     >
-                        <Select placeholder="Loại người dùng">
-                            <Option value="QuanTri">Quản Trị</Option>
-                            <Option value="KhachHang">Khách Hàng</Option>
+                        <Select placeholder="Chọn mã nhóm của bạn">
+                            <Option value="GP00">GP00</Option>
                         </Select>
                     </Form.Item>
+
 
                     <Form.Item {...tailFormItemLayout}>
                         <Button type="dashed" htmlType="submit">
@@ -212,7 +238,7 @@ export default function RegisterPage() {
             <div>
                 <Table
                     columns={userColums}
-                    datasource={userArr}
+                    dataSource={userArr}
                 />
             </div>
         </>
