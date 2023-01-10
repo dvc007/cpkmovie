@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { deleteUser, getUserList } from '../../service/adminService'
-import { Button, Space, Table, Tag, message } from 'antd';
+import { Button, Space, Table, message } from 'antd';
 import { userColums } from './utils';
 import withAuth from '../../HOC/withAuth';
 

@@ -26,7 +26,6 @@ export const userColums = [
             }
             else {
                 return <><Tag className="text-blue-500">{text}</Tag></>
-
             }
         }
 

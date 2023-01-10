@@ -31,7 +31,12 @@ export default function UserNav() {
                 >
                     Dang Nhap
                 </button>
-                <button className='border-2 px-5 py-2 border-black rounded'>Dang Ky</button>
+                <button
+                    onClick={() => { window.location.href = '/register' }}
+                    className='border-2 px-5 py-2 border-black rounded'
+                >
+                    Dang Ky
+                </button>
             </div>
         }
     }

@@ -1,54 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { postRegister } from '../../service/userService';
 import { getUserList } from './../../service/adminService';
+import { userColums } from '../AdminUserPage/utils';
+
 import {
-    AutoComplete,
     Button,
-    Cascader,
-    Checkbox,
-    Col,
     Form,
     Input,
-    InputNumber,
-    Row,
     Select,
+    Table,
 } from 'antd';
-import AdminUserPage from '../AdminUserPage/AdminUserPage';
+
 const { Option } = Select;
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
+
 const formItemLayout = {
     labelCol: {
         xs: {
@@ -104,20 +68,47 @@ export default function RegisterPage() {
     };
 
     //getListUser
+    const [userArr, setUserArr] = useState([])
 
     useEffect(() => {
-        getUserList()
-            .then((result) => {
-                console.log(result);
-            }).catch((err) => {
-                console.log(err);
-            });
+        let fetchUserList = () => {
+
+            // const handleRemoveUser = (account) => {
+            //     deleteUser(account)
+            //         .then((result) => {
+            //             message.success('Xóa thành công')
+            //             fetchUserList()
+            //             console.log(result);
+            //         }).catch((err) => {
+            //             message.error('Thất bại')
+            //             console.log(err.response.data.content);
+            //         });
+            // }
+
+            getUserList()
+                .then((result) => {
+                    let userList = result.data.content.map((item) => {
+                        return {
+                            ...item, key: item.taiKhoan, action:
+                                <div className='space-x-5'>
+                                    <Button type='primary' danger >Xóa</Button>
+                                    <Button type='dashed' >Sửa</Button>
+                                </div>
+                        }
+                    })
+                    setUserArr(userList)
+                }).catch((err) => {
+                    console.log(err);
+                });
+        }
+        fetchUserList()
     }, [])
+
 
     return (
         <>
 
-            <div className='h-screen w-screen flex justify-center items-center'>
+            <div className='flex justify-center items-center'>
                 <Form
                     {...formItemLayout}
                     form={form}
@@ -210,19 +201,6 @@ export default function RegisterPage() {
                         </Select>
                     </Form.Item>
 
-                    <Form.Item
-                        name="agreement"
-                        valuePropName="checked"
-                        rules={[
-                            {
-                                validator: (_, value) =>
-                                    value ? Promise.resolve() : Promise.reject(new Error('Nên chấp nhận thõa thuận')),
-                            },
-                        ]}
-                        {...tailFormItemLayout}
-                    >
-
-                    </Form.Item>
                     <Form.Item {...tailFormItemLayout}>
                         <Button type="dashed" htmlType="submit">
                             Đăng Ký
@@ -230,8 +208,12 @@ export default function RegisterPage() {
                     </Form.Item>
                 </Form>
             </div>
-            <div>
 
+            <div>
+                <Table
+                    columns={userColums}
+                    datasource={userArr}
+                />
             </div>
         </>
     )
