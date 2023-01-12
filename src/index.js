@@ -14,7 +14,7 @@ import spinnerSlice from './redux_toolkit/spinnerSlice';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 // const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store_toolkit = configureStore({
+export const store_toolkit = configureStore({
   reducer: {
     userSlice,
     spinnerSlice

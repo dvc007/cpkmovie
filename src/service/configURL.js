@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { userLocalService } from './localSevice';
+import { store_toolkit } from './../index';
+import { setLoadingOff, setLoadingOn } from '../redux_toolkit/spinnerSlice';
 
 export const https = axios.create({
     baseURL: 'https://movienew.cybersoft.edu.vn',
@@ -9,3 +11,27 @@ export const https = axios.create({
 
     }
 });
+
+// // Add a request interceptor
+// https.interceptors.request.use(function (config) {
+//     // Do something before request is sent
+//     console.log("x");
+//     store_toolkit.dispatch(setLoadingOn())
+//     return config;
+// }, function (error) {
+//     // Do something with request error
+//     return Promise.reject(error);
+// });
+
+// // Add a response interceptor
+// https.interceptors.response.use(function (response) {
+//     // Any status code that lie within the range of 2xx cause this function to trigger
+//     // Do something with response data
+//     console.log("y");
+//     store_toolkit.dispatch(setLoadingOff())
+//     return response;
+// }, function (error) {
+//     // Any status codes that falls outside the range of 2xx cause this function to trigger
+//     // Do something with response error
+//     return Promise.reject(error);
+// });
