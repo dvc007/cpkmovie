@@ -232,6 +232,7 @@ export default function RegisterPage() {
                             Đăng Ký
                         </Button>
                     </Form.Item>
+
                 </Form>
             </div>
 

@@ -22,7 +22,7 @@ export default function LoginPage() {
                 dispatch(setUserInfo(result.data.content))
                 userLocalService.set(result.data.content)
                 setTimeout(() => {
-                    navigate('/') //sau khi đăng nhập thành công thì đều hướng về trang chủ
+                    navigate('/')
                 }, 1000)
             }).catch((err) => {
                 console.log(err);
